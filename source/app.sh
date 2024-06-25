@@ -47,6 +47,18 @@ function print_module()
 	echo "$number. $module_name:"
 }
 
+
+# $1: File path
+# $?: File buffer
+function read_file()
+{
+	local file_path=$1
+	
+	echo "$(cat "$file_path")"
+}
+
+
+
 file_path_list="$(get_files_list "./test" ".h")"
 
 counter=1
@@ -54,8 +66,12 @@ for file_path in $file_path_list
 do
 	file_name="$(get_file_name "$file_path")"
 	module_name="$(get_file_name_without_extension "$file_name")"
-	
 	echo "$(print_module $counter "$module_name")"
+	
+	echo "$file_path"
+	buffer="$(read_file "$file_path")"
+	echo "$buffer"
+	echo ""
 	
 	counter=$(($counter + 1))
 done
