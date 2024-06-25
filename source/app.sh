@@ -72,6 +72,22 @@ function remove_prefix()
 	echo "$buffer"
 }
 
+# $1: Buffer
+# $2: Suffix Pattern
+# $?: Buffer which suffix data is removed
+function remove_suffix()
+{
+	local buffer="$1"
+	local suffix="$2"
+	
+	while [[ $buffer == *"$suffix"* ]]
+	do
+		buffer="${buffer%$suffix*}"
+	done
+	
+	echo "$buffer"
+}
+
 
 
 file_path_list="$(get_files_list "./test" ".h")"
@@ -85,6 +101,7 @@ do
 	
 	buffer="$(read_file "$file_path")"
 	buffer="$(remove_prefix "$buffer" "/**@")"
+	buffer="$(remove_suffix "$buffer" "*/")"
 	echo "$buffer"
 	echo ""
 	
