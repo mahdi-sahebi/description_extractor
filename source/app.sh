@@ -49,12 +49,15 @@ function print_module()
 
 file_path_list="$(get_files_list "./test" ".h")"
 
+counter=1
 for file_path in $file_path_list
 do
 	file_name="$(get_file_name "$file_path")"
 	module_name="$(get_file_name_without_extension "$file_name")"
 	
-	echo "$(print_module "0" "$module_name")"
+	echo "$(print_module $counter "$module_name")"
+	
+	counter=$(($counter + 1))
 done
 
 
