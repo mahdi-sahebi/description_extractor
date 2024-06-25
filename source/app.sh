@@ -88,7 +88,18 @@ function remove_suffix()
 	echo "$buffer"
 }
 
-
+# $1: Buffer
+# $2: Pattern string
+# $3: Replace string
+# $?: Buffer which contains replace string instread of pattern string
+function string_replace()
+{
+	local buffer="$1"
+	local pattern="$2"
+	local replace="$3"
+	
+	echo "${buffer//$pattern/$replace}"
+}
 
 file_path_list="$(get_files_list "./test" ".h")"
 
@@ -102,8 +113,13 @@ do
 	buffer="$(read_file "$file_path")"
 	buffer="$(remove_prefix "$buffer" "/**@")"
 	buffer="$(remove_suffix "$buffer" "*/")"
+	
+	
+	buffer="$(string_replace "$buffer" "\* @ " "")"
+	buffer="$(string_replace "$buffer" "\* @" "")"
+	buffer="$(string_replace "$buffer" "\*" "")"
+
 	echo "$buffer"
-	echo ""
 	
 	counter=$(($counter + 1))
 done
