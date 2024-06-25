@@ -47,7 +47,6 @@ function print_module()
 	echo "$number. $module_name:"
 }
 
-
 # $1: File path
 # $?: File buffer
 function read_file()
@@ -55,6 +54,22 @@ function read_file()
 	local file_path=$1
 	
 	echo "$(cat "$file_path")"
+}
+
+# $1: Buffer
+# $2: Prefix Pattern
+# $?: Buffer which prefix data is removed
+function remove_prefix()
+{
+	local buffer="$1"
+	local prefix="$2"
+	
+	while [[ $buffer == *"$prefix"* ]]
+	do
+		buffer="${buffer#*$prefix}"
+	done
+	
+	echo "$buffer"
 }
 
 
@@ -68,8 +83,8 @@ do
 	module_name="$(get_file_name_without_extension "$file_name")"
 	echo "$(print_module $counter "$module_name")"
 	
-	echo "$file_path"
 	buffer="$(read_file "$file_path")"
+	buffer="$(remove_prefix "$buffer" "/**@")"
 	echo "$buffer"
 	echo ""
 	
