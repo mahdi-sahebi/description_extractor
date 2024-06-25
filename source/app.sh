@@ -101,6 +101,21 @@ function string_replace()
 	echo "${buffer//$pattern/$replace}"
 }
 
+# $1: Buffer
+# $2: Begin pattern of description
+# $3: End pattern of description
+function read_description()
+{
+	local buffer=$1
+	local begin_pattern=$2
+	local end_pattern=$3
+	
+	local description="$(remove_prefix "$buffer" "$begin_pattern")"
+	description="$(remove_suffix "$description" "$end_pattern")"
+	
+	echo "$description"
+}
+
 file_path_list="$(get_files_list "./test" ".h")"
 
 counter=1
@@ -111,15 +126,14 @@ do
 	echo "$(print_module $counter "$module_name")"
 	
 	buffer="$(read_file "$file_path")"
-	buffer="$(remove_prefix "$buffer" "/**@")"
-	buffer="$(remove_suffix "$buffer" "*/")"
+	description="$(read_description "$buffer" "/**@" "*/")"
 	
 	
-	buffer="$(string_replace "$buffer" "\* @ " "")"
-	buffer="$(string_replace "$buffer" "\* @" "")"
-	buffer="$(string_replace "$buffer" "\*" "")"
+	description="$(string_replace "$description" "\* @ " "")"
+	description="$(string_replace "$description" "\* @" "")"
+	description="$(string_replace "$description" "\*" "")"
 
-	echo "$buffer"
+	echo "$description"
 	
 	counter=$(($counter + 1))
 done
